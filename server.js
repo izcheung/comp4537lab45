@@ -39,10 +39,9 @@ class Server {
     const q = url.parse(req.url, true);
     const pathname = q.pathname;
 
-    if (pathname !== "/api/definitions") {
-      res.setHeader("Content-Type", "text/plain");
+    if (pathname !== "/api/definitions/") {
       res.statusCode = 404;
-      res.end(wrongPath);
+      res.end(JSON.stringify(wrongPath));
       return;
     }
 
@@ -55,9 +54,8 @@ class Server {
       this.handlePost(req, res);
     } else {
       this.setCommonHeaders(res);
-      res.setHeader("Content-Type", "text/plain");
       res.statusCode = 405;
-      res.end(methodNotAllowed);
+      res.end(JSON.stringify(methodNotAllowed));
       return;
     }
   }
@@ -68,8 +66,7 @@ class Server {
 
     if (!word || word.trim() === "") {
       res.statusCode = 400;
-      res.setHeader("Content-Type", "text/plain");
-      res.end(emptyInput);
+      res.end(JSON.stringify(emptyInput));
       return;
     }
 
@@ -117,14 +114,17 @@ class Server {
         res.write(alreadyExists.replace("%1", entry.word));
       } else {
         this.dictionary.push({ word, definition });
-        res.setHeader("Content-Type", "text/plain");
+
         res.setHeader("Access-Control-Allow-Origin", "*");
         this.totalEntries += 1;
+
         res.write(
-          `${numberRequest.replace(
-            "%1",
-            this.totalRequests
-          )} ${numberRequest.replace("%2", this.totalEntries)}.`
+          JSON.stringify(
+            `${numberRequest.replace(
+              "%1",
+              this.totalRequests
+            )} ${numberRequest.replace("%2", this.totalEntries)}.`
+          )
         );
       }
 
