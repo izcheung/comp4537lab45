@@ -42,6 +42,7 @@ class Server {
       res.setHeader("Content-Type", "text/plain");
       res.statusCode = 404;
       res.end(wrongPath);
+      return;
     }
 
     if (req.method === "OPTIONS") {
@@ -56,6 +57,7 @@ class Server {
       res.setHeader("Content-Type", "text/plain");
       res.statusCode = 405;
       res.end(methodNotAllowed);
+      return;
     }
   }
 
@@ -110,6 +112,7 @@ class Server {
       );
 
       if (entry) {
+        res.statusCode = 409; // Conflict
         res.write(alreadyExists.replace("%1", entry.word));
       } else {
         this.dictionary.push({ word, definition });
