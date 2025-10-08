@@ -120,10 +120,9 @@ class Server {
 
         res.write(
           JSON.stringify({
-            message: `${numberRequest.replace(
-              "%1",
-              this.totalRequests
-            )} ${numberRequest.replace("%2", this.totalEntries)}.`,
+            message: numberRequest
+              .replace("%1", this.totalRequests)
+              .replace("%2", this.totalEntries),
           })
         );
       }
