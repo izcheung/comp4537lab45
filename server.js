@@ -71,7 +71,10 @@ class Server {
     }
 
     const entry = this.dictionary.find(
-      (e) => e.word.toLowerCase() === word.toLowerCase()
+      (e) => {
+        if (e.word)
+          e.word.toLowerCase() === word.toLowerCase();
+      }
     );
 
     if (entry) {
@@ -106,7 +109,10 @@ class Server {
       let definition = params.get("definition");
 
       const entry = this.dictionary.find(
-        (e) => e.word.toLowerCase() === word.toLowerCase()
+        (e) => {
+          if (e.word)
+            e.word.toLowerCase() === word.toLowerCase();
+        }
       );
 
       if (entry) {
