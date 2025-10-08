@@ -70,12 +70,9 @@ class Server {
       return;
     }
 
-    const entry = this.dictionary.find(
-      (e) => {
-        if (e.word)
-          e.word.toLowerCase() === word.toLowerCase();
-      }
-    );
+    const entry = this.dictionary.find((e) => {
+      if (e.word) e.word.toLowerCase() === word.toLowerCase();
+    });
 
     if (entry) {
       res.writeHead(200, { "Content-Type": "application/json" });
@@ -99,27 +96,27 @@ class Server {
 
   handlePost(req, res) {
     let query = "";
+
     req.on("data", (chunk) => {
       query += chunk;
     });
 
     req.on("end", () => {
-      let params = new URLSearchParams(query);
-      let word = params.get("word");
-      let definition = params.get("definition");
+      const parsed = JSON.parse(query);
+      const word = parsed.word;
+      const definition = parsed.definition;
+      console.log(word);
+      console.log(definition);
 
-      const entry = this.dictionary.find(
-        (e) => {
-          if (e.word)
-            e.word.toLowerCase() === word.toLowerCase();
-        }
-      );
+      const entry = this.dictionary.find((e) => {
+        if (e.word) e.word.toLowerCase() === word.toLowerCase();
+      });
 
       if (entry) {
         res.statusCode = 409;
         res.write(alreadyExists.replace("%1", entry.word));
       } else {
-        this.dictionary.push({ word, definition });
+        this.dictionary.push({ word: word, definition: definition });
 
         res.setHeader("Access-Control-Allow-Origin", "*");
         this.totalEntries += 1;
