@@ -55,7 +55,7 @@ class Server {
     } else {
       this.setCommonHeaders(res);
       res.statusCode = 405;
-      res.end(JSON.stringify(methodNotAllowed));
+      res.end(JSON.stringify({ message: methodNotAllowed }));
       return;
     }
   }
@@ -66,7 +66,7 @@ class Server {
 
     if (!word || word.trim() === "") {
       res.statusCode = 400;
-      res.end(JSON.stringify(emptyInput));
+      res.end(JSON.stringify({ message: emptyInput }));
       return;
     }
 
@@ -87,7 +87,7 @@ class Server {
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
-          error: `Word '${word}' not found`,
+          message: `Word '${word}' not found`,
           requestNumber: this.totalRequests,
         })
       );
