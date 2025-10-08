@@ -5,6 +5,7 @@ const {
   wrongPath,
   alreadyExists,
   numberRequest,
+  emptyInput,
 } = require("./lang/en/en");
 
 class Server {
@@ -112,7 +113,7 @@ class Server {
       );
 
       if (entry) {
-        res.statusCode = 409; // Conflict
+        res.statusCode = 409;
         res.write(alreadyExists.replace("%1", entry.word));
       } else {
         this.dictionary.push({ word, definition });
