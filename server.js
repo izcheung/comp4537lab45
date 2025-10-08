@@ -1,7 +1,7 @@
 let http = require("http");
 let url = require("url");
 const {
-  doesNotExist,
+  notFound,
   wrongPath,
   alreadyExists,
   numberRequest,
@@ -87,7 +87,7 @@ class Server {
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
-          message: `Word '${word}' not found`,
+          message: `${notFound.replace("%1", word)}`,
           requestNumber: this.totalRequests,
         })
       );
