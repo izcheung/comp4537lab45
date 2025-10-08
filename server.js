@@ -71,7 +71,7 @@ class Server {
     }
 
     const entry = this.dictionary.find((e) => {
-      if (e.word) e.word.toLowerCase() === word.toLowerCase();
+      if (e.word) return e.word.toLowerCase() === word.toLowerCase();
     });
 
     if (entry) {
@@ -117,8 +117,11 @@ class Server {
         res.write(alreadyExists.replace("%1", entry.word));
       } else {
         this.dictionary.push({ word: word, definition: definition });
+        console.log(
+          "Current dictionary:",
+          JSON.stringify(this.dictionary, null, 2)
+        );
 
-        res.setHeader("Access-Control-Allow-Origin", "*");
         this.totalEntries += 1;
 
         res.write(
