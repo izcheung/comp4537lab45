@@ -123,6 +123,8 @@ class Server {
             message: numberRequest
               .replace("%1", this.totalRequests)
               .replace("%2", this.totalEntries),
+            word: word,
+            definition: definition,
           })
         );
       }
