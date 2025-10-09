@@ -113,16 +113,12 @@ class Server {
       });
 
       if (entry) {
-        res.statusCode = 200;
+        res.statusCode = 409;
         res.write(
           JSON.stringify({ message: alreadyExists.replace("%1", entry.word) })
         );
       } else {
         this.dictionary.push({ word: word, definition: definition });
-        console.log(
-          "Current dictionary:",
-          JSON.stringify(this.dictionary, null, 2)
-        );
 
         this.totalEntries += 1;
 
