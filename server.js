@@ -32,40 +32,50 @@ class Server {
   }
 
   handleRequest(req, res) {
-    this.totalRequests += 1;
+    try {
+      this.totalRequests += 1;
 
-    this.setCommonHeaders(res);
+      this.setCommonHeaders(res);
 
-    const q = url.parse(req.url, true);
-    const pathname = q.pathname;
+      const q = url.parse(req.url, true);
+      const pathname = q.pathname;
 
-    if (pathname !== "/api/definitions/") {
-      res.statusCode = 404; // Not found
+      if (pathname !== "/api/definitions/") {
+        res.statusCode = 404; // Not found
+        res.end(
+          JSON.stringify({
+            message: wrongPath,
+            requestNumber: this.totalRequests,
+          })
+        );
+        return;
+      }
+
+      if (req.method === "OPTIONS") {
+        res.statusCode = 204; // No content (for preflight)
+        res.end();
+      } else if (req.method === "GET") {
+        this.handleGet(req, res);
+      } else if (req.method === "POST") {
+        this.handlePost(req, res);
+      } else {
+        res.statusCode = 405; // Method not allowed
+        res.end(
+          JSON.stringify({
+            message: methodNotAllowed,
+            requestNumber: this.totalRequests,
+          })
+        );
+        return;
+      }
+    } catch {
+      res.statusCode = 500; // Internal server error
       res.end(
         JSON.stringify({
-          message: wrongPath,
+          message: "Internal Server Error",
           requestNumber: this.totalRequests,
         })
       );
-      return;
-    }
-
-    if (req.method === "OPTIONS") {
-      res.statusCode = 204; // No content (for preflight)
-      res.end();
-    } else if (req.method === "GET") {
-      this.handleGet(req, res);
-    } else if (req.method === "POST") {
-      this.handlePost(req, res);
-    } else {
-      res.statusCode = 405; // Method not allowed
-      res.end(
-        JSON.stringify({
-          message: methodNotAllowed,
-          requestNumber: this.totalRequests,
-        })
-      );
-      return;
     }
   }
 
