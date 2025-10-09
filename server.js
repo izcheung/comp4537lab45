@@ -33,7 +33,7 @@ class Server {
 
   handleRequest(req, res) {
     try {
-      this.totalRequests += 1;
+      this.totalRequests++;
 
       this.setCommonHeaders(res);
 
