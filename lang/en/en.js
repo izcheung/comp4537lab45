@@ -4,5 +4,5 @@ module.exports = {
   wrongPath: "Wrong path",
   methodNotAllowed: "Method must be GET or POST",
   emptyInput: "Empty word is not allowed",
-  notFound: "Word %1 not found",
+  notFound: "Request %1, word '%2' not found",
 };

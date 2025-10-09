@@ -87,8 +87,9 @@ class Server {
       res.writeHead(404, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify({
-          message: `${notFound.replace("%1", word)}`,
-          requestNumber: this.totalRequests,
+          message: notFound
+            .replace("%1", this.totalRequests)
+            .replace("%2", word),
         })
       );
     }
