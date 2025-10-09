@@ -9,7 +9,7 @@ const {
 } = require("./lang/en/en");
 
 class Server {
-  constructor(port = 8000) {
+  constructor(port = 10000) {
     this.dictionary = [];
     this.totalRequests = 0;
     this.totalEntries = 0;
@@ -41,7 +41,12 @@ class Server {
 
     if (pathname !== "/api/definitions/") {
       res.statusCode = 404; // Not found
-      res.end(JSON.stringify(wrongPath));
+      res.end(
+        JSON.stringify({
+          message: wrongPath,
+          requestNumber: this.totalRequests,
+        })
+      );
       return;
     }
 
@@ -53,9 +58,13 @@ class Server {
     } else if (req.method === "POST") {
       this.handlePost(req, res);
     } else {
-      this.setCommonHeaders(res);
       res.statusCode = 405; // Method not allowed
-      res.end(JSON.stringify({ message: methodNotAllowed }));
+      res.end(
+        JSON.stringify({
+          message: methodNotAllowed,
+          requestNumber: this.totalRequests,
+        })
+      );
       return;
     }
   }
@@ -70,7 +79,12 @@ class Server {
 
     if (!word || word.trim() === "" || !this.isValidWord(word)) {
       res.statusCode = 400; // Bad request
-      res.end(JSON.stringify({ message: invalidWord }));
+      res.end(
+        JSON.stringify({
+          message: invalidWord,
+          requestNumber: this.totalRequests,
+        })
+      );
       return;
     }
 
@@ -79,7 +93,7 @@ class Server {
     });
 
     if (entry) {
-      res.writeHead(200, { "Content-Type": "application/json" });
+      res.statusCode = 200; // OK
       res.end(
         JSON.stringify({
           word: entry.word,
@@ -88,7 +102,7 @@ class Server {
         })
       );
     } else {
-      res.writeHead(404, { "Content-Type": "application/json" });
+      res.statusCode = 404; // Not found
       res.end(
         JSON.stringify({
           message: notFound
@@ -111,8 +125,6 @@ class Server {
       const parsed = JSON.parse(query);
       const word = parsed.word;
       const definition = parsed.definition;
-      console.log(word);
-      console.log(definition);
 
       const entry = this.dictionary.find((e) => {
         if (e.word) return e.word.toLowerCase() === word.toLowerCase();
@@ -128,9 +140,8 @@ class Server {
         );
       } else {
         this.dictionary.push({ word: word, definition: definition });
-
         this.totalEntries += 1;
-
+        res.statusCode = 201; // Created
         res.write(
           JSON.stringify({
             message: numberRequest
