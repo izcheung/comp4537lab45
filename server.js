@@ -114,7 +114,9 @@ class Server {
 
       if (entry) {
         res.statusCode = 200;
-        res.write(JSON.stringify(alreadyExists.replace("%1", entry.word)));
+        res.write(
+          JSON.stringify({ message: alreadyExists.replace("%1", entry.word) })
+        );
       } else {
         this.dictionary.push({ word: word, definition: definition });
         console.log(
