@@ -40,13 +40,13 @@ class Server {
     const pathname = q.pathname;
 
     if (pathname !== "/api/definitions/") {
-      res.statusCode = 404;
+      res.statusCode = 404; // Not found
       res.end(JSON.stringify(wrongPath));
       return;
     }
 
     if (req.method === "OPTIONS") {
-      res.statusCode = 204;
+      res.statusCode = 204; // No content (for preflight)
       res.end();
     } else if (req.method === "GET") {
       this.handleGet(req, res);
@@ -54,7 +54,7 @@ class Server {
       this.handlePost(req, res);
     } else {
       this.setCommonHeaders(res);
-      res.statusCode = 405;
+      res.statusCode = 405; // Method not allowed
       res.end(JSON.stringify({ message: methodNotAllowed }));
       return;
     }
@@ -69,7 +69,7 @@ class Server {
     const word = q.query.word;
 
     if (!word || word.trim() === "" || !this.isValidWord(word)) {
-      res.statusCode = 400;
+      res.statusCode = 400; // Bad request
       res.end(JSON.stringify({ message: invalidWord }));
       return;
     }
@@ -119,7 +119,7 @@ class Server {
       });
 
       if (entry) {
-        res.statusCode = 409;
+        res.statusCode = 409; // Conflict (adding a word that exists in the dictionary already)
         res.write(
           JSON.stringify({
             message: alreadyExists.replace("%1", entry.word),
