@@ -3,6 +3,6 @@ module.exports = {
   numberRequest: "Request # %1.  Total entries: %2",
   wrongPath: "Wrong path",
   methodNotAllowed: "Method must be GET or POST",
-  emptyInput: "Empty word is not allowed",
+  invalidWord: "Invalid word",
   notFound: "Request %1, word '%2' not found",
 };

@@ -5,7 +5,7 @@ const {
   wrongPath,
   alreadyExists,
   numberRequest,
-  emptyInput,
+  invalidWord,
 } = require("./lang/en/en");
 
 class Server {
@@ -60,13 +60,17 @@ class Server {
     }
   }
 
+  isValidWord(word) {
+    return /^[A-Za-z\s]+$/.test(word);
+  }
+
   handleGet(req, res) {
     const q = url.parse(req.url, true);
     const word = q.query.word;
 
-    if (!word || word.trim() === "") {
+    if (!word || word.trim() === "" || !this.isValidWord(word)) {
       res.statusCode = 400;
-      res.end(JSON.stringify({ message: emptyInput }));
+      res.end(JSON.stringify({ message: invalidWord }));
       return;
     }
 
