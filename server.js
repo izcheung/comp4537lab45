@@ -90,6 +90,7 @@ class Server {
           message: notFound
             .replace("%1", this.totalRequests)
             .replace("%2", word),
+          requestNumber: this.totalRequests,
         })
       );
     }
@@ -116,7 +117,10 @@ class Server {
       if (entry) {
         res.statusCode = 409;
         res.write(
-          JSON.stringify({ message: alreadyExists.replace("%1", entry.word) })
+          JSON.stringify({
+            message: alreadyExists.replace("%1", entry.word),
+            requestNumber: this.totalRequests,
+          })
         );
       } else {
         this.dictionary.push({ word: word, definition: definition });
@@ -128,6 +132,7 @@ class Server {
             message: numberRequest
               .replace("%1", this.totalRequests)
               .replace("%2", this.totalEntries),
+            requestNumber: this.totalRequests,
           })
         );
       }
