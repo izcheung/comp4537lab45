@@ -59,7 +59,7 @@ class Server {
       } else if (req.method === "POST") {
         this.handlePost(req, res);
       } else {
-        res.statusCode = 405; // Method not allowed
+        res.statusCode = 405; // Method not allowed - Used ChatGPT here to find appropriate status code
         res.end(
           JSON.stringify({
             message: methodNotAllowed,
@@ -80,7 +80,7 @@ class Server {
   }
 
   isValidWord(word) {
-    return /^[A-Za-z\s]+$/.test(word);
+    return /^[A-Za-z\s]+$/.test(word); // Used ChatGPT here to find the regex pattern for parsing valid word
   }
 
   handleGet(req, res) {
@@ -141,7 +141,7 @@ class Server {
       });
 
       if (entry) {
-        res.statusCode = 409; // Conflict (adding a word that exists in the dictionary already)
+        res.statusCode = 409; // Conflict (adding a word that exists in the dictionary already) - Used ChatGPT to find status code
         res.write(
           JSON.stringify({
             message: alreadyExists.replace("%1", entry.word),
@@ -151,7 +151,7 @@ class Server {
       } else {
         this.dictionary.push({ word: word, definition: definition });
         this.totalEntries += 1;
-        res.statusCode = 201; // Created
+        res.statusCode = 201; // Created - Used ChatGPT to find status code
         res.write(
           JSON.stringify({
             message: numberRequest
